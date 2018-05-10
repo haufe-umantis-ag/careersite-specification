@@ -1,0 +1,245 @@
+FORMAT: 1A9
+
+# Career Site
+
+The career site is the applicant-facing component of the Haufe Talent Attraction ecosystem. It manages job ads, traces application status, hosts company-applicant communication.
+
+## Machine to machine [/careersite/v1/m2m]
+
+Machine to machine operations for systems integration purposes.
+
+### import job opportunities [POST /careersite/v1/m2m/opportunities/job_import]
+
+imports opportunities that can relate to masterdata. The token must be obtained from integration microservice or new authentication service.
+
+As a response the list of ids of successfully processed postings is returned
+
++ Request (application/json)
+    + Headers
+
+            Accept-Charset: utf-8
+            X-AUTH-TOKEN: {{token}}
+            X-FORWARDED-HOST: localhost
+
+    + Body
+    
+            [
+                {
+                    "type": "MERGE",
+                    "id": "dsahg326253",
+                    "position_id": "sdaghf-123",
+                    "department_id": "jktuuk/364",
+                    "owner_id": "dsagf/123",
+                    "translations": [
+                        {
+                            "language": "en-US",
+                            "default": true,
+                            "title": "Java guru with Spring and Kafka",
+                            "responsibilities": "Lorem ipsum...",
+                            "qualifications": "Lorem ipsum...",
+                            "benefits": "Lorem ipsum...",
+                            "additional_information": "Lorem ipsum...",
+                            "apply_url": "http://jobs.mycompany.com/apply/eab208ac-8dea-43a4-901b-9f4f3510fe73"
+                        },
+                        {
+                            "language": "de-DE",
+                            "default": false,
+                            "title": "Java guru mit Spring and Kafka",
+                            "responsibilities": "Lorem ipsum...",
+                            "qualifications": "Lorem ipsum...",
+                            "benefits": "Lorem ipsum...",
+                            "additional_information": "Lorem ipsum...",
+                            "apply_url": "http://jobs.mycompany.com/apply/eab208ac-8dea-43a4-901b-9f4f3510fe73?language=de"
+                        }
+                    ],
+                    "status": "DRAFT",
+                    "start_date": "2018-05-01",
+                    "end_date": "2018-06-01",
+                    "posting_start_date": "2018-05-01",
+                    "posting_end_date": "2018-05-30",
+                    "location": {
+                        "name": "Portland, OR",
+                        "latitude": 45.5231,
+                        "longitude": 122.6765
+                    },
+                    "keywords": ["java", "spring", "kafka"]
+                },
+                {
+                    "type": "DELETE",
+                    "id": "1234567890"
+                }
+            ]
+
+            
+    + Schema
+
+             {
+                "$schema": "http://json-schema.org/draft-06/schema#",
+                "id": "Career Site JobAd import",
+                "definitions": {
+                    "MergeJobEvent": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "description": "defines a merge event",
+                                "constant": "MERGE",
+                                "required": true
+                            },
+                            "id": {
+                                "description": "the id of the posting in the source system",
+                                "type": "string",
+                                "required": true
+                            },
+                            "position_id": {
+                                "description": "the id in the source system of the position the job ad is referring to (has to match master data import)",
+                                "type": "string",
+                                "required": true
+                            },
+                            "department_id": {
+                                "description": "the id in the source system of the orgunit (has to match master data import)",
+                                "type": "string",
+                                "required": true
+                            },
+                            "owner_id": {
+                                "description": "the id in the source system of the hiring manager of the job (has to match master data import)",
+                                "type": "string",
+                                "required": true
+                            },
+                            "translations": {
+                                "type": "array",
+                                "items": {"$ref": "#/definitions/JobOfferingTranslation"},
+                                "minItems": 1
+                            },
+                            "start_date": {
+                                "description": "date and time from when the position should be available for application",
+                                "type": "string",
+                                "format": "date-time",
+                                "required": false
+                            },
+                            "end_date": {
+                                "description": "date and time from until the position should be available for application",
+                                "type": "string",
+                                "format": "date-time",
+                                "required": false
+                            },
+                            "posting_start_date": {
+                                "description": "date and time from when the job ad should be visible",
+                                "type": "string",
+                                "format": "date-time",
+                                "required": false
+                            },
+                            "posting_end_date": {
+                                "description": "date and time until when the job ad should be visible",
+                                "type": "string",
+                                "format": "date-time",
+                                "required": false
+                            },
+                            "location": {
+                                "description": "The location where the job is available. The name is a direct value, not a reference list item. Location search works against this field."
+                                "type": {"$ref": "#/definitions/GeoLocation"},
+                                "required": false
+                            },
+                            "keywords": {
+                                "description": "List of keywords tagging the job. It's a list of direct values, not a reference list items. The uploaded must make sure that the tags are consistent over time, as it influences search quality.",
+                                "type": "array",
+                                "uniqueItems": true,
+                                "items": {
+                                    "type": "string",
+                                    "minItems": 1
+                                },
+                                "required": false
+                            }
+                        }
+                    },
+                    "DeleteJobEvent": {
+                        "type": {
+                            "description": "defines a delete event",
+                            "constant": "DELETE",
+                            "required": true
+                        },
+                        "id": {
+                            "description": "the id of the event in the source system",
+                            "type": "string",
+                            "required": true
+                        }
+                    },
+                    "JobOfferingTranslation" : {
+                        "language": {
+                            "description": "the ISO language code",
+                            "type": "string",
+                            "required": true
+                        },
+                        "default" : {
+                            "description": "is this a default translation that will be used in case when user preferred languages are not present",
+                            "type": "boolena",
+                            "required": false
+                        },
+                        "title": {
+                            "description": "title of the job post",
+                            "type": "string",
+                            "required": false
+                        },
+                        "responsibilities": {
+                            "description": "the responsibilities block of the job ad",
+                            "type": "string",
+                            "required": false
+                        },
+                        "qualifications": {
+                            "description": "the qualifications block of the job ad",
+                            "type": "string",
+                            "required": false
+                        },
+                        "benefits": {
+                            "description": "the benefits block of the job ad",
+                            "type": "string",
+                            "required": false
+                        },
+                        "additional_information": {
+                            "description": "the additional information block of the job ad",
+                            "type": "string",
+                            "required": false
+                        },
+                        "apply_url":{
+                            "description": "url external to marketplace to apply to the job",
+                            "type": "string",
+                            "required": true
+                        }
+                    },
+                    "JobEvent": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/MergeJobEvent"
+                            },
+                            {
+                                "$ref": "#/definitions/DeleteJobEvent"
+                            }
+                        ]
+                    },
+                    "JobEventList": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/JobEvent"
+                        },
+                        "minItems": 1
+                    },
+                    "GeoLocation": {
+                        "name": {
+                            "description": "human readable name of the GeoLocation",
+                            "type": "string",
+                            "required": true
+                        },
+                        "latitude": {
+                            "type": "number",
+                            "required": true
+                        },
+                        "longitude": {
+                            "type": "number",
+                            "required": true
+                        }
+                    }
+                }
+            }
+
++ Response 200 (application/json)
+
+            ['dsahg326253']
