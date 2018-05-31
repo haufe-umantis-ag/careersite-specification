@@ -62,7 +62,8 @@ As a response the list of ids of successfully processed postings is returned
                         "administrational": {
                             "country": "USA",
                             "state_province": "Oregon",
-                            "city": "Portland"
+                            "city": "Portland",
+                            "zip_code": "12345"
                         },
                         "numerical": {
                             "latitude": 45.5231,
@@ -258,6 +259,10 @@ As a response the list of ids of successfully processed postings is returned
                         "city": {
                             "type": "string",
                             "required": true
+                        },
+                        "zip_code": {
+                            "type": "string",
+                            "required": true
                         }
                     },
                     "NumericalGeoLocation": {
@@ -284,6 +289,17 @@ Returns a list of job opportunity summaries. The request body may contain a list
     + Headers
     
     + Body
+            
+            {
+                "job_ids": [
+                          "1234.567-abc","890a-asdf"
+            ],
+            "sort_key": "required. Field to sort collection by - example: date or title",
+            "sort_direction":"required. ascending or decending- example: asc/ dec",
+            "records_per_page":"required. integer - example: 25",
+            "page": "required. Page in collection to return. If out of bounds, default to 0",
+                    
+            }
     
     + Schema
 
@@ -296,12 +312,65 @@ Returns all information of a job opportunity. (WIP)
 + Request (application/json)
 
     + Headers
-    
+
+            Accept-Charset: utf-8
+            X-FORWARDED-HOST: localhost
+
     + Body
-            
-            {
-               "some-value": "this is a value" 
-            }
+    
+            [
+                {
+                    "id": "dsahg326253",
+                    "position_id": "sdaghf-123",
+                    "department_id": "jktuuk/364",
+                    "owner_id": "dsagf/123",
+                    "brand": "Converse",
+                    "translations": [
+                        {
+                            "language": "en-US",
+                            "default": true,
+                            "title": "Java guru with Spring and Kafka",
+                            "responsibilities": "Lorem ipsum...",
+                            "qualifications": "Lorem ipsum...",
+                            "benefits": "Lorem ipsum...",
+                            "additional_information": "Lorem ipsum...",
+                            "apply_url": "http://jobs.mycompany.com/apply/eab208ac-8dea-43a4-901b-9f4f3510fe73"
+                        },
+                        {
+                            "language": "de-DE",
+                            "default": false,
+                            "title": "Java guru mit Spring and Kafka",
+                            "responsibilities": "Lorem ipsum...",
+                            "qualifications": "Lorem ipsum...",
+                            "benefits": "Lorem ipsum...",
+                            "additional_information": "Lorem ipsum...",
+                            "apply_url": "http://jobs.mycompany.com/apply/eab208ac-8dea-43a4-901b-9f4f3510fe73?language=de"
+                        }
+                    ],
+                    "status": "DRAFT",
+                    "start_date": "2018-05-01",
+                    "end_date": "2018-06-01",
+                    "posting_start_date": "2018-05-01",
+                    "posting_end_date": "2018-05-30",
+                    "location": {
+                        "administrational": {
+                            "country": "USA",
+                            "state_province": "Oregon",
+                            "city": "Portland"
+                        },
+                        "numerical": {
+                            "latitude": 45.5231,
+                            "longitude": 122.6765
+                        }
+                    },
+                    "keywords": ["java", "spring", "kafka"]
+                },
+                {
+                    "type": "DELETE",
+                    "id": "1234567890"
+                }
+            ]
+    
     
     + Schema
 
@@ -316,6 +385,86 @@ Returns a summary of job opportunities matching search criteria (TDB: zip codes,
     + Headers
     
     + Body
+    
+    + Schema
+
++ Response 200 (application/json)
+
+
+
+## Import jobs by date  [POST /careersite/v1/m2m/opportunities/job_import_by_date]
+
+Returns a list of job posts that were posted on or after a date. The token must be obtained from integration microservice or new authentication service.
+
+Returns the full job post
+
++ Request (application/json)
+    + Headers
+
+            Accept-Charset: utf-8
+            X-AUTH-TOKEN: {{token}}
+            X-FORWARDED-HOST: localhost
+    
+    + Body
+        
+            [
+        
+                {
+                    "type": "SELECT",
+                    "id": "dsahg326253",
+                    "requisition_id": "abc_123",
+                    "position_id": "sdaghf-123",
+                    "department_id": "jktuuk/364",
+                    "owner_id": "dsagf/123",
+                    "brand": "Converse",
+                    "source": "Taleo",
+                    "relocation": "false",
+                    "positionType": "Full",
+                    "org": "Retail, Corporate, Distribution",
+                    "function": "The Corporate Function Name",
+                    "translations": [
+                        {
+                            "language": "en-US",
+                            "default": true,
+                            "title": "Java guru with Spring and Kafka",
+                            "responsibilities": "Lorem ipsum...",
+                            "qualifications": "Lorem ipsum...",
+                            "benefits": "Lorem ipsum...",
+                            "additional_information": "Lorem ipsum...",
+                            "experience": "5+ years",
+                            "apply_url": "http://jobs.mycompany.com/apply/eab208ac-8dea-43a4-901b-9f4f3510fe73"
+                        },
+                        {
+                            "language": "de-DE",
+                            "default": false,
+                            "title": "Java guru with Spring and Kafka",
+                            "responsibilities": "Lorem ipsum...",
+                            "qualifications": "Lorem ipsum...",
+                            "benefits": "Lorem ipsum...",
+                            "additional_information": "Lorem ipsum...",
+                            "experience": "5+ years",
+                            "apply_url": "http://jobs.mycompany.com/apply/eab208ac-8dea-43a4-901b-9f4f3510fe73?language=de"
+                        }
+                    ],
+                    "status": "DRAFT",
+                    "start_date": "2018-05-01",
+                    "end_date": "2018-06-01",
+                    "posting_start_date": "2018-05-01",
+                    "posting_end_date": "2018-05-30",
+                    "location": {
+                        "address": {
+                            "country": "USA",
+                            "state_province": "Oregon",
+                            "city": "Portland"
+                        },
+                        "numeric": {
+                            "latitude": 45.5231,
+                            "longitude": 122.6765
+                        }
+                    },
+                    "keywords": ["java", "spring", "kafka"]
+                }
+            ]
     
     + Schema
 
