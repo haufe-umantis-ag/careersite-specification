@@ -21,284 +21,25 @@ As a response the list of ids of successfully processed postings is returned
             X-FORWARDED-HOST: localhost
 
     + Body
-    
-            [
-                {
-                    "type": "MERGE",
-                    "id": "dsahg326253",
-                    "position_id": "sdaghf-123",
-                    "department_id": "jktuuk/364",
-                    "owner_id": "dsagf/123",
-                    "brand": "Converse",
-                    "translations": [
-                        {
-                            "language": "en-US",
-                            "default": true,
-                            "title": "Java guru with Spring and Kafka",
-                            "responsibilities": "Lorem ipsum...",
-                            "qualifications": "Lorem ipsum...",
-                            "benefits": "Lorem ipsum...",
-                            "additional_information": "Lorem ipsum...",
-                            "apply_url": "http://jobs.mycompany.com/apply/eab208ac-8dea-43a4-901b-9f4f3510fe73"
-                        },
-                        {
-                            "language": "de-DE",
-                            "default": false,
-                            "title": "Java guru mit Spring and Kafka",
-                            "responsibilities": "Lorem ipsum...",
-                            "qualifications": "Lorem ipsum...",
-                            "benefits": "Lorem ipsum...",
-                            "additional_information": "Lorem ipsum...",
-                            "apply_url": "http://jobs.mycompany.com/apply/eab208ac-8dea-43a4-901b-9f4f3510fe73?language=de"
-                        }
-                    ],
-                    "status": "DRAFT",
-                    "start_date": "2018-05-01",
-                    "end_date": "2018-06-01",
-                    "posting_start_date": "2018-05-01",
-                    "posting_end_date": "2018-05-30",
-                    "location": {
-                        "administrational": {
-                            "country": "USA",
-                            "state_province": "Oregon",
-                            "city": "Portland",
-                            "zip_code": "12345"
-                        },
-                        "numerical": {
-                            "latitude": 45.5231,
-                            "longitude": 122.6765
-                        }
-                    },
-                    "keywords": ["java", "spring", "kafka"]
-                },
-                {
-                    "type": "DELETE",
-                    "id": "1234567890"
-                }
-            ]
-
-    + Schema
-
-             {
-                "$schema": "http://json-schema.org/draft-06/schema#",
-                "id": "Career Site JobAd import",
-                "definitions": {
-                    "MergeJobEvent": {
-                        "type": "object",
-                        "properties": {
-                            "type": {
-                                "description": "defines a merge event",
-                                "constant": "MERGE",
-                                "required": true
-                            },
-                            "id": {
-                                "description": "the id of the posting in the source system",
-                                "type": "string",
-                                "required": true
-                            },
-                            "position_id": {
-                                "description": "the id in the source system of the position the job ad is referring to (has to match master data import)",
-                                "type": "string",
-                                "required": true
-                            },
-                            "department_id": {
-                                "description": "the id in the source system of the orgunit (has to match master data import)",
-                                "type": "string",
-                                "required": true
-                            },
-                            "owner_id": {
-                                "description": "the id in the source system of the hiring manager of the job (has to match master data import)",
-                                "type": "string",
-                                "required": true
-                            },
-                            "brand": {
-                                "description": "the name of the brand the job is for like Converse for Nike",
-                                "type": "string",
-                                "required": false
-                            },
-                            "translations": {
-                                "type": "array",
-                                "items": {"$ref": "#/definitions/JobOfferingTranslation"},
-                                "minItems": 1
-                            },
-                            "status": {
-                                "description": "status of the job ad. 
-                                    DRAFT means a non-completed job ad, serves as a placeholder
-                                    ACTIVE is a job ad to be displayed
-                                    INACTIVE is a job ad that is kept for some reason, but not to be displayed"
-                                "type": { 
-                                    "enum": [ "DRAFT", "ACTIVE", "INACTIVE" ] 
-                                },
-                                "required": true
-                            },
-                            "start_date": {
-                                "description": "date and time from when the position should be available for application",
-                                "type": "string",
-                                "format": "date-time",
-                                "required": false
-                            },
-                            "end_date": {
-                                "description": "date and time from until the position should be available for application",
-                                "type": "string",
-                                "format": "date-time",
-                                "required": false
-                            },
-                            "posting_start_date": {
-                                "description": "date and time from when the job ad should be visible",
-                                "type": "string",
-                                "format": "date-time",
-                                "required": false
-                            },
-                            "posting_end_date": {
-                                "description": "date and time until when the job ad should be visible",
-                                "type": "string",
-                                "format": "date-time",
-                                "required": false
-                            },
-                            "location": {
-                                "description": "The location where the job is available. The name is a direct value, not a reference list item. Location search works against this field."
-                                "type": {"$ref": "#/definitions/GeoLocation"},
-                                "required": false
-                            },
-                            "keywords": {
-                                "description": "List of keywords tagging the job. It's a list of direct values, not a reference list items. The uploaded must make sure that the tags are consistent over time, as it influences search quality.",
-                                "type": "array",
-                                "uniqueItems": true,
-                                "items": {
-                                    "type": "string",
-                                    "minItems": 1
-                                },
-                                "required": false
-                            }
-                        }
-                    },
-                    "DeleteJobEvent": {
-                        "type": {
-                            "description": "defines a delete event",
-                            "constant": "DELETE",
-                            "required": true
-                        },
-                        "id": {
-                            "description": "the id of the event in the source system",
-                            "type": "string",
-                            "required": true
-                        }
-                    },
-                    "JobOfferingTranslation" : {
-                        "language": {
-                            "description": "the ISO language code",
-                            "type": "string",
-                            "required": true
-                        },
-                        "default" : {
-                            "description": "is this a default translation that will be used in case when user preferred languages are not present",
-                            "type": "boolean",
-                            "required": false
-                        },
-                        "title": {
-                            "description": "title of the job post",
-                            "type": "string",
-                            "required": false
-                        },
-                        "responsibilities": {
-                            "description": "the responsibilities block of the job ad",
-                            "type": "string",
-                            "required": false
-                        },
-                        "qualifications": {
-                            "description": "the qualifications block of the job ad",
-                            "type": "string",
-                            "required": false
-                        },
-                        "benefits": {
-                            "description": "the benefits block of the job ad",
-                            "type": "string",
-                            "required": false
-                        },
-                        "additional_information": {
-                            "description": "the additional information block of the job ad",
-                            "type": "string",
-                            "required": false
-                        },
-                        "apply_url":{
-                            "description": "url external to marketplace to apply to the job",
-                            "type": "string",
-                            "required": true
-                        }
-                    },
-                    "JobEvent": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/definitions/MergeJobEvent"
-                            },
-                            {
-                                "$ref": "#/definitions/DeleteJobEvent"
-                            }
-                        ]
-                    },
-                    "JobEventList": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/definitions/JobEvent"
-                        },
-                        "minItems": 1
-                    },
-                    "GeoLocation": {
-                        "anyOf": [
-                            {
-                                "name": "administrational"
-                                "$ref": "#/definitions/AdministrationalGeoLocation"
-                            },
-                            {
-                                "name": "numerical"
-                                "$ref": "#/definitions/NumericalGeoLocation"
-                            }
-                        ]
-                    },
-                    "AdministrationalGeoLocation": {
-                        "country": {
-                            "type": "string",
-                            "required": true
-                        },
-                        "state_province": {
-                            "type": "string",
-                            "required": true
-                        },
-                        "city": {
-                            "type": "string",
-                            "required": true
-                        },
-                        "zip_code": {
-                            "type": "string",
-                            "required": true
-                        }
-                    },
-                    "NumericalGeoLocation": {
-                        "latitude": {
-                            "type": "number",
-                            "required": true
-                        },
-                        "longitude": {
-                            "type": "number",
-                            "required": true
-                        }
-                    }
-                },
-                
-                "type": object,
-                
-                "properties": {
-                    "$ref": "#/definitions/JobEventList"
-                }
-                
-            }
+    + Attributes (JobEventList)
 
 + Response 200 (application/json)
 
-## search by criteria  [GET /careersite/v1/m2m/opportunities]
+### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?with_details}]
 
 Returns a summary of job opportunities matching search criteria. If more than one search criteria is
 present, then all of them needs to match.
+
++ Parameters
+
+    + newer_than (optional, string, `2018-05-01`) ... ISO8601 format date, to be compared with posting start date
+    + location_country (optional, array[string], `USA,Canada`) ... filter for country, match: any of, comma-separated
+    + location_province_state (optional, array[string], `California,Oregon`) ... filter for state or province, match: any of, comma-separated
+    + location_city (optional, array[string], `Portland,San Fransisco`) ... filter for city, match: any of, comma-separated
+    + location_zip (optional, array[string], `12345,54321`) ... filter for zip code, match: any of, comma-separated
+    + keywords (optional, array[string], `java,kafka`) ... filter for keywords, match: any of, comma-separated
+    + with_details (required, boolean, `true`) ... If only a summary or full details should be returned. Summary is without large texts, like responsibilities, qualifications, benefits, additional information, apply url
+
 
 + Request (application/json)
 
@@ -307,269 +48,22 @@ present, then all of them needs to match.
             Accept-Charset: utf-8
             X-FORWARDED-HOST: localhost
 
-    + Parameters
-        + newer_than (optional, string, `2018-05-01`) ... ISO8601 format date, to be compared with posting_start_date
-        + location_country (optional, array[string], `USA,Canada`) ... filter for country, match: any of
-        + location_province_state (optional, array[string], `California,Oregon`) ... filter for state or province, match: any of
-        + location_city (optional, array[string], `Portland,San Fransisco`) ... filter for city, match: any of
-        + location_zip (optional, array[string], `12345,54321`) ... filter for zip code, match: any of
-        + keywords (optional, array[string], `java,kafka`) ... filter for keywords, match: any of
-        + with_details (required, boolean, `true`) ... If only a summary or full details should be returned. Summary is without large texts, like responsibilities, qualifications, benefits, additional_information, apply_url
-        
 
 + Response 200 (application/json)
 
     + Headers
 
     + Body
-
-            [
-                {
-                    "id": "dsahg326253",
-                    "position_id": "sdaghf-123",
-                    "department_id": "jktuuk/364",
-                    "owner_id": "dsagf/123",
-                    "brand": "Converse",
-                    "translations": [
-                        {
-                            "language": "en-US",
-                            "default": true,
-                            "title": "Java guru with Spring and Kafka",
-                            "responsibilities": "Lorem ipsum...",
-                            "qualifications": "Lorem ipsum...",
-                            "benefits": "Lorem ipsum...",
-                            "additional_information": "Lorem ipsum...",
-                            "apply_url": "http://jobs.mycompany.com/apply/eab208ac-8dea-43a4-901b-9f4f3510fe73"
-                        },
-                        {
-                            "language": "de-DE",
-                            "default": false,
-                            "title": "Java guru mit Spring and Kafka",
-                            "responsibilities": "Lorem ipsum...",
-                            "qualifications": "Lorem ipsum...",
-                            "benefits": "Lorem ipsum...",
-                            "additional_information": "Lorem ipsum...",
-                            "apply_url": "http://jobs.mycompany.com/apply/eab208ac-8dea-43a4-901b-9f4f3510fe73?language=de"
-                        }
-                    ],
-                    "status": "DRAFT",
-                    "start_date": "2018-05-01",
-                    "end_date": "2018-06-01",
-                    "posting_start_date": "2018-05-01",
-                    "posting_end_date": "2018-05-30",
-                    "location": {
-                        "administrational": {
-                            "country": "USA",
-                            "state_province": "Oregon",
-                            "city": "Portland",
-                            "zip_code": "12345"
-                        },
-                        "numerical": {
-                            "latitude": 45.5231,
-                            "longitude": 122.6765
-                        }
-                    },
-                    "keywords": ["java", "spring", "kafka"]
-                }
-            ]
     
-    + Schema
+    + Attributes
+        + _embedded
+            + jobs (array[MergeJobEvent])
+        + _links (Paging)
 
-             {
-                "$schema": "http://json-schema.org/draft-06/schema#",
-                "id": "Career Site Jobs query",
-                "definitions": {
-                    "JobPost": {
-                        "type": "object",
-                        "properties": {
-                            "type": {
-                                "description": "defines a merge event",
-                                "constant": "MERGE",
-                                "required": true
-                            },
-                            "id": {
-                                "description": "the id of the posting in the source system",
-                                "type": "string",
-                                "required": true
-                            },
-                            "position_id": {
-                                "description": "the id in the source system of the position the job ad is referring to (has to match master data import)",
-                                "type": "string",
-                                "required": true
-                            },
-                            "department_id": {
-                                "description": "the id in the source system of the orgunit (has to match master data import)",
-                                "type": "string",
-                                "required": true
-                            },
-                            "owner_id": {
-                                "description": "the id in the source system of the hiring manager of the job (has to match master data import)",
-                                "type": "string",
-                                "required": true
-                            },
-                            "brand": {
-                                "description": "the name of the brand the job is for like Converse for Nike",
-                                "type": "string",
-                                "required": false
-                            },
-                            "translations": {
-                                "type": "array",
-                                "items": {"$ref": "#/definitions/JobOfferingTranslation"},
-                                "minItems": 1
-                            },
-                            "status": {
-                                "description": "status of the job ad. 
-                                    DRAFT means a non-completed job ad, serves as a placeholder
-                                    ACTIVE is a job ad to be displayed
-                                    INACTIVE is a job ad that is kept for some reason, but not to be displayed"
-                                "type": { 
-                                    "enum": [ "DRAFT", "ACTIVE", "INACTIVE" ] 
-                                },
-                                "required": true
-                            },
-                            "start_date": {
-                                "description": "date and time from when the position should be available for application",
-                                "type": "string",
-                                "format": "date-time",
-                                "required": false
-                            },
-                            "end_date": {
-                                "description": "date and time from until the position should be available for application",
-                                "type": "string",
-                                "format": "date-time",
-                                "required": false
-                            },
-                            "posting_start_date": {
-                                "description": "date and time from when the job ad should be visible",
-                                "type": "string",
-                                "format": "date-time",
-                                "required": false
-                            },
-                            "posting_end_date": {
-                                "description": "date and time until when the job ad should be visible",
-                                "type": "string",
-                                "format": "date-time",
-                                "required": false
-                            },
-                            "location": {
-                                "description": "The location where the job is available. The name is a direct value, not a reference list item. Location search works against this field."
-                                "type": {"$ref": "#/definitions/GeoLocation"},
-                                "required": false
-                            },
-                            "keywords": {
-                                "description": "List of keywords tagging the job. It's a list of direct values, not a reference list items. The uploaded must make sure that the tags are consistent over time, as it influences search quality.",
-                                "type": "array",
-                                "uniqueItems": true,
-                                "items": {
-                                    "type": "string",
-                                    "minItems": 1
-                                },
-                                "required": false
-                            }
-                        }
-                    },
-                    "JobOfferingTranslation" : {
-                        "language": {
-                            "description": "the ISO language code",
-                            "type": "string",
-                            "required": true
-                        },
-                        "default" : {
-                            "description": "is this a default translation that will be used in case when user preferred languages are not present",
-                            "type": "boolean",
-                            "required": false
-                        },
-                        "title": {
-                            "description": "title of the job post",
-                            "type": "string",
-                            "required": false
-                        },
-                        "responsibilities": {
-                            "description": "the responsibilities block of the job ad",
-                            "type": "string",
-                            "required": false
-                        },
-                        "qualifications": {
-                            "description": "the qualifications block of the job ad",
-                            "type": "string",
-                            "required": false
-                        },
-                        "benefits": {
-                            "description": "the benefits block of the job ad",
-                            "type": "string",
-                            "required": false
-                        },
-                        "additional_information": {
-                            "description": "the additional information block of the job ad",
-                            "type": "string",
-                            "required": false
-                        },
-                        "apply_url":{
-                            "description": "url external to marketplace to apply to the job",
-                            "type": "string",
-                            "required": true
-                        }
-                    },
-                    "JobPostList": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/definitions/JobPost"
-                        },
-                        "minItems": 1
-                    },
-                    "GeoLocation": {
-                        "anyOf": [
-                            {
-                                "name": "administrational"
-                                "$ref": "#/definitions/AdministrationalGeoLocation"
-                            },
-                            {
-                                "name": "numerical"
-                                "$ref": "#/definitions/NumericalGeoLocation"
-                            }
-                        ]
-                    },
-                    "AdministrationalGeoLocation": {
-                        "country": {
-                            "type": "string",
-                            "required": true
-                        },
-                        "state_province": {
-                            "type": "string",
-                            "required": true
-                        },
-                        "city": {
-                            "type": "string",
-                            "required": true
-                        },
-                        "zip_code": {
-                            "type": "string",
-                            "required": true
-                        }
-                    },
-                    "NumericalGeoLocation": {
-                        "latitude": {
-                            "type": "number",
-                            "required": true
-                        },
-                        "longitude": {
-                            "type": "number",
-                            "required": true
-                        }
-                    }
-                },
-                
-                "type": object,
-                
-                "properties": {
-                    "$ref": "#/definitions/JobPostList"
-                }
-                
-            }
+### list all available locations  [GET /careersite/v1/m2m/locations]
 
-## list all available locations  [GET /careersite/v1/m2m/locations]
-
-Returns a list of all locations present in the database, regardless of job status.
+Returns a list of all locations present in the database, regardless of job status. It's without
+pagination for 
 
 + Request (application/json)
 
@@ -578,86 +72,13 @@ Returns a list of all locations present in the database, regardless of job statu
     + Headers
 
     + Body
-        
-            [
-                {
-                    "administrational": {
-                        "country": "USA",
-                        "state_province": "Oregon",
-                        "city": "Portland",
-                        "zip_code": "12345"
-                    },
-                    "numerical": {
-                        "latitude": 45.5231,
-                        "longitude": 122.6765
-                    }
-                }
-            ]
+    
+    + Attributes
+        + _embedded
+            + locations (array[GeoLocation])
 
-    + Schema
 
-            {
-                "$schema": "http://json-schema.org/draft-06/schema#",
-                "id": "Career Site List of Job Locations",
-                "definitions": {
-                    "GeoLocationList": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/definitions/GeoLocation"
-                        },
-                        "minItems": 1
-                    },
-                    "GeoLocation": {
-                        "anyOf": [
-                            {
-                                "name": "administrational"
-                                "$ref": "#/definitions/AdministrationalGeoLocation"
-                            },
-                            {
-                                "name": "numerical"
-                                "$ref": "#/definitions/NumericalGeoLocation"
-                            }
-                        ]
-                    },
-                    "AdministrationalGeoLocation": {
-                        "country": {
-                            "type": "string",
-                            "required": true
-                        },
-                        "state_province": {
-                            "type": "string",
-                            "required": true
-                        },
-                        "city": {
-                            "type": "string",
-                            "required": true
-                        },
-                        "zip_code": {
-                            "type": "string",
-                            "required": true
-                        }
-                    },
-                    "NumericalGeoLocation": {
-                        "latitude": {
-                            "type": "number",
-                            "required": true
-                        },
-                        "longitude": {
-                            "type": "number",
-                            "required": true
-                        }
-                    }
-                },
-
-                "type": object,
-                
-                "properties": {
-                    "$ref": "#/definitions/GeoLocationList"
-                }
-
-            }
-
-## list all available keywords  [GET /careersite/v1/m2m/keywords]
+### list all available keywords  [GET /careersite/v1/m2m/keywords]
 
 Returns a list of all keywords present in the database, regardless of job status.
 
@@ -681,3 +102,67 @@ Returns a list of all keywords present in the database, regardless of job status
                     "type": "string"
                 }
             }
+            
+            
+            
+# Data Structures            
+            
+## JobEventList
++ merge_events (array[MergeJobEvent]) - an array of create/update job events
++ delete_events (array[DeleteJobEvent]) - an array of delete job events
+
+## MergeJobEvent
++ id: `dsahg326253` (string, required) - the id of the posting in the source system
++ position_id: `sdaghf-123` (string, required) - the id in the source system of the position the job ad is referring to (has to match master data import)
++ department_id: `jktuuk/364` (string) - the id in the source system of the orgunit (has to match master data import)
++ owner_id: `dsagf/123` (string) - the id in the source system of the hiring manager of the job (has to match master data import)
++ brand: `Converse` (string, required) - the name of the brand the job is for like Converse for Nike
++ translations (array[JobOfferingTranslation]) - an array of language translations of text fields of the job ad
++ status: `ACTIVE` (enum, required) - the status of the job ad
+    + DRAFT - non-completed job ad, serves as a placeholder for future completion
+    + ACTIVE - a job ad to be displayed
+    + INACTIVE - a job ad that is kept for some reason, but not to be displayed
++ start_date: `2018-05-01` (string) - ISO 8601 date and time from when the position should be available for application
++ end_date: `2018-06-01` (string) - ISO 8601 date and time from until the position should be available for application
++ posting_start_date: `2018-05-01` (string) - ISO 8601 date and time from when the job ad should be visible
++ posting_end_date: `2018-05-30` (string) - ISO 8601 date and time until when the job ad should be visible
++ location (GeoLocation) - The location where the job is available. The name is a direct value, not a reference list item. Location search works against this field.
++ keywords: java, spring, kafka (array[string]) - List of keywords tagging the job. It's a list of direct values, not a reference list items. The uploader must make sure that the tags are consistent over time, as it influences search quality.
++ coporate_functions: engineering (array[string]) - List of corporate functions. It's a list of direct values, not a reference list items. The uploader must make sure that the tags are consistent over time, as it influences search quality.
+
+## DeleteJobEvent
++ id: `dsahg326253` (string, required) - the id of the posting in the source system
+
+## JobOfferingTranslation
++ language: `en` (string, required) - ISO 639-1 language code
++ is_default: true (boolean, required) - indicates which of the translations is the default one. there should be only one set to true.
++ title: `Java guru with Spring and Kafka` (string) - title of the job post
++ responsibilities: `Lorem ipsum...` (string) - the responsibilities block of the job ad
++ qualifications: `Lorem ipsum...` (string) - the qualifications block of the job ad
++ benefits: `Lorem ipsum...` (string) - the benefits block of the job ad
++ additional_information: `Lorem ipsum...` (string) - the additional information block of the job ad
++ apply_url: `http://jobs.mycompany.com/apply/eab208ac-8dea-43a4-901b-9f4f3510fe73` (string) - url external to marketplace to apply to the job
+
+## GeoLocation
++ administrational (AdministrationalGeoLocation) - location designated by country, province, etc
++ numerical (NumericalGeoLocation) - location designated by coordinates
+
+## AdministrationalGeoLocation
++ country: `USA` (string, required) - country
++ state_province: `Oregon` (string, required) - state or province
++ city: `Portland` (string, required) - city
++ postal_code: `12345` (string, required) - postal code 
+
+## NumericalGeoLocation
++ latitude: `45.5231` (number, required) - latitude of the same location as of administrational
++ longitude: `122.6765` (number, required) - longitude of the same location as of administrational
+
+## Paging
++ self (required)
+    + href: `/careersite/v1/m2m/opportunities?newer_than=2018-06-01&limit=50&offset=100&with_details=false` (string, required) 
++ first (required)
+    + href: `/careersite/v1/m2m/opportunities?newer_than=2018-06-01&limit=50&offset=0&with_details=false` (string, required)
++ prev (required)
+    + href: `/careersite/v1/m2m/opportunities?newer_than=2018-06-01&limit=50&offset=50&with_details=false` (string, required)
++ next (required)
+    + href: `/careersite/v1/m2m/opportunities?newer_than=2018-06-01&limit=50&offset=150&with_details=false` (string, required)
