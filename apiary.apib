@@ -129,7 +129,10 @@ Returns a list of all keywords present in the database, regardless of job status
 + posting_end_date: `2018-05-30` (string, optional) - ISO 8601 date and time until when the job ad should be visible
 + location (GeoLocation, optional) - The location where the job is available. The name is a direct value, not a reference list item. Location search works against this field.
 + keywords: java, spring, kafka (array[string], optional) - List of keywords tagging the job. It's a list of direct values, not a reference list items. The uploader must make sure that the tags are consistent over time, as it influences search quality.
-+ coporate_functions: engineering (array[string], optional) - List of corporate functions. It's a list of direct values, not a reference list items. The uploader must make sure that the tags are consistent over time, as it influences search quality.
++ coporate_function: engineering (string, optional) - Corporate function of the position. It's a direct value, not a reference list item. The uploader must make sure that the tags are consistent over time, as it influences search quality.
++ position_type: `FULLTIME` (enum, optional) - Full Time or Part Time
+    + FULLTIME
+    + PARTTIME
 
 ## DeleteJobEvent
 + id: `dsahg326253` (string, required) - the id of the posting in the source system
@@ -145,14 +148,14 @@ Returns a list of all keywords present in the database, regardless of job status
 + apply_url: `http://jobs.mycompany.com/apply/eab208ac-8dea-43a4-901b-9f4f3510fe73` (string, optional) - url external to marketplace to apply to the job
 
 ## GeoLocation
-+ administrational (AdministrationalGeoLocation, optional) - location designated by country, province, etc
++ administrational (AdministrationalGeoLocation, required) - location designated by country, province, etc
 + numerical (NumericalGeoLocation, optional) - location designated by coordinates
 
 ## AdministrationalGeoLocation
 + country: `USA` (string, required) - country
 + state_province: `Oregon` (string, required) - state or province
 + city: `Portland` (string, required) - city
-+ postal_code: `12345` (string, required) - postal code 
++ postal_code: `12345` (string, optional) - postal code 
 
 ## NumericalGeoLocation
 + latitude: `45.5231` (number, required) - latitude of the same location as of administrational
