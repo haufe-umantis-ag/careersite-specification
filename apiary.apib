@@ -25,7 +25,7 @@ As a response the list of ids of successfully processed postings is returned
 
 + Response 200 (application/json)
 
-### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?with_details}{?corporate_functions}{?brands}{?experience_levels}{?divisions}]
+### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?with_details}{?corporate_functions}{?brands}{?experience_levels}{?divisions}{?radius}]
 
 Returns a summary of job opportunities matching search criteria. If more than one search criteria is
 present, then all of them needs to match.
@@ -43,6 +43,7 @@ present, then all of them needs to match.
     + brands ( optional, array[string] ) ... if Nike, Hurley specified- exclude Converse and Jordan
     + experience_levels ( optional, array[string] ) ... Director, Individual Contributor.  I don't this this is consistent though. Not sure how this will work
     + divisions ( optional, array[string] ) ... corporate, retail, distribution.  
+    + radius ( optional, int ) ... number for the radius from location information, in kilometers. Need to discuss how this would work  
     
 + Request (application/json)
 
@@ -70,7 +71,7 @@ Returns a specific job opportunity based on a job id.
 
 + Parameters
 
-    + jobid (required, string, `1234-abc`) ... the job id reutned in the job summary
+    + jobid (required, string, `1234-abc`) ... the job id returned in the job summary
     
 + Request (application/json)
 
