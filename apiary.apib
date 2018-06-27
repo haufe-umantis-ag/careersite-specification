@@ -25,7 +25,37 @@ As a response the list of ids of successfully processed postings is returned.
 
 + Response 200 (application/json)
 
-### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?job_ids}{?with_details}]
+### get job  [GET /careersite/v1/m2m/opportunities/{?jobid}]
+
+Returns a specific job opportunity based on a job id.
+
++ Parameters
+
+    + jobid (required, string, `1234-abc`) ... the job id returned in the job summary
+    
++ Request (application/json)
+
+    + Headers
+    
+            Accept-Charset: utf-8
+            X-FORWARDED-HOST: localhost
+
+
++ Response 200 (application/json)
+
+    + Headers
+
+    + Body
+    
+    + Attributes
+        + _embedded
+            + job (MergeJobEvent)
+        + _links
+            + self (required)
+                + href: `/careersite/v1/m2m/opportunities/1234-abc` (string, required) 
+
+
+### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?corporate_functions}{?brands}{?experience_levels}{?divisions}{?radius}]
 
 Returns a summary of job opportunities matching search criteria. If more than one search criteria is
 present, then all of them needs to match (AND). Each criterium can contain a comma separated values, in that case 
@@ -39,8 +69,11 @@ either of them is a match (OR).
     + location_city (optional, array[string], `Portland,San Fransisco`) ... filter for city, match: any of, comma-separated
     + location_zip (optional, array[string], `12345,54321`) ... filter for zip code, match: any of, comma-separated
     + keywords (optional, array[string], `java,kafka`) ... filter for keywords, match: any of, comma-separated
-    + job_ids (optional, array[string], `job01,job02`) ... retrieve jobs directly without searching, match: any of, comma-separated
-    + with_details (required, boolean, `true`) ... If only a summary or full details should be returned. Summary is without large texts, like responsibilities, qualifications, benefits, additional information, apply url
+    + corporate_functions ( optional, array[string], `engineering,sales` ) ... or search. Jobs have only one corporate function. Specifies jobs only with the defined corporate functions. TBD: yes
+    + brands ( optional, array[string], `Nike,Hurley` ) ... if Nike, Hurley specified- exclude Converse and Jordan. TBD: yes
+    + experience_levels ( optional, array[string], `Director` ) ... Director, Individual Contributor.  TBD: yes
+    + divisions ( optional, array[string], `retail,distribution` ) ... corporate, retail, distribution. TBD: enum or text?
+    + radius ( optional, int, `10`) ... number for the radius from location information, in kilometers. TBD: yes
 
 
 + Request (application/json)
@@ -59,7 +92,7 @@ either of them is a match (OR).
     
     + Attributes
         + _embedded
-            + jobs (array[MergeJobEvent])
+            + jobs (array[JobItem])
         + _links (Paging)
 
 ### list all available locations  [GET /careersite/v1/m2m/locations]
@@ -172,3 +205,10 @@ Returns a list of all keywords present in the database, regardless of job status
     + href: `/careersite/v1/m2m/opportunities?newer_than=2018-06-01&limit=50&offset=50&with_details=false` (string, required)
 + next (required)
     + href: `/careersite/v1/m2m/opportunities?newer_than=2018-06-01&limit=50&offset=150&with_details=false` (string, required)
+
+## JobItem    
++ _embedded
+    + job (MergeJobEvent)
++ _links
+    + self (required)
+        + href: `/careersite/v1/m2m/opportunities/1234-abc` (string, required)]
