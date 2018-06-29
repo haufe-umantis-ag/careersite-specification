@@ -25,7 +25,7 @@ As a response the list of ids of successfully processed postings is returned
 
 + Response 200 (application/json)
 
-### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?with_details}{?corporate_functions}{?brands}{?bands}{?divisions}{?radius}]
+### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?with_details}{?categories}{?brands}{?bands}{?divisions}{?radius}]
 
 Returns a summary of job opportunities matching search criteria. If more than one search criteria is
 present, then all of them needs to match.
@@ -38,7 +38,7 @@ present, then all of them needs to match.
     + location_city (optional, array[string], `Portland,San Fransisco`) ... filter for city, match: any of, comma-separated
     + keywords (optional, array[string], `java,kafka`) ... filter for keywords, match: any of, comma-separated
     + with_details (required, boolean, `true`) ... If only a summary or full details should be returned. Summary is without large texts, like responsibilities, qualifications, benefits, additional information, apply url - see MergeJobSummaryEvent
-    + corporate_functions ( optional, array[string] ) ... or search. Jobs have only one corporate function. Specifies jobs only with the defined corporate functions
+    + categories ( optional, array[string] ) ... or search. Jobs have only one category ( formerly called corporate function). Specifies jobs only with the defined categories
     + brands ( optional, array[string] ) ... if Nike, Hurley specified- exclude Converse and Jordan
     + bands ( optional, array[string] ) ... Director, Individual Contributor. 
     + divisions ( optional, array[string] ) ... corporate, retail, distribution.  
@@ -107,7 +107,75 @@ pagination for
     + Attributes
         + _embedded
             + locations (array[GeoLocation])
+            
+            
+### list all available brands  [GET /careersite/v1/m2m/brands]
 
+Returns a list of all brands present in the database, regardless of job status. It's without
+pagination for ( nike, jordan, converse, hurley  )
+
++ Request (application/json)
+
++ Response 200 (application/hal+json)
+
+    + Headers
+
+    + Body
+    
+    + Attributes
+        + _embedded
+            + brands (array[GeoLocation])
+
+### list all available divisions  [GET /careersite/v1/m2m/divisions]
+
+Returns a list of all divisions present in the database, regardless of job status. It's without
+pagination for 
+
++ Request (application/json)
+
++ Response 200 (application/hal+json)
+
+    + Headers
+
+    + Body
+    
+    + Attributes
+        + _embedded
+            + divisions (array[string])
+            
+### list all available categories  [GET /careersite/v1/m2m/categories]
+
+Returns a list of all categories present in the database, regardless of job status. It's without
+pagination for 
+
++ Request (application/json)
+
++ Response 200 (application/hal+json)
+
+    + Headers
+
+    + Body
+    
+    + Attributes
+        + _embedded
+            + categories (array[string])
+            
+### list all available experience  [GET /careersite/v1/m2m/experience]
+
+Returns a list of all experience levels present in the database, regardless of job status. It's without
+pagination for 
+
++ Request (application/json)
+
++ Response 200 (application/hal+json)
+
+    + Headers
+
+    + Body
+    
+    + Attributes
+        + _embedded
+            + experience (array[string])
 
 ### list all available keywords  [GET /careersite/v1/m2m/keywords]
 
@@ -154,8 +222,8 @@ Returns a list of all keywords present in the database, regardless of job status
 + posting_start_date: `2018-05-01` (string, optional) - ISO 8601 date and time from when the job ad should be visible
 + posting_end_date: `2018-05-30` (string, optional) - ISO 8601 date and time until when the job ad should be visible
 + location (GeoLocation, optional) - The location where the job is available. The name is a direct value, not a reference list item. Location search works against this field.
-+ coporate_function: engineering (string, optional) - The positions Corporate Function. It is a direct value, not a reference list item. The uploader must make sure that the tags are consistent over time, as it influences search quality.  Note that Avature they are often entered by hand. Some Avature and all Taleo come from SAP, and so are more consistent.
-+ division: Manufacturing (string, optional) - Corporate, Retail, Distribution, Manufacturing. The division the position is under. Possibly determined by the Corporate Function.  Available in Taleo, Possibly not in Avature.
++ category: engineering (string, optional) - The positions category ( formerly called Corporate Function). It is a direct value, not a reference list item. The uploader must make sure that the tags are consistent over time, as it influences search quality.  Note that Avature they are often entered by hand. Some Avature and all Taleo come from SAP, and so are more consistent.
++ division: Manufacturing (string, optional) - Corporate, Retail, Distribution, Manufacturing. The division the position is under.   Available in Taleo, Possibly not in Avature.
 
 
 ## MergeJobEvent
@@ -176,7 +244,7 @@ Returns a list of all keywords present in the database, regardless of job status
 + posting_end_date: `2018-05-30` (string, optional) - ISO 8601 date and time until when the job ad should be visible
 + location (GeoLocation, optional) - The location where the job is available. The name is a direct value, not a reference list item. Location search works against this field.
 + keywords: java, spring, kafka (array[string], optional) - List of keywords tagging the job. It's a list of direct values, not a reference list items. The uploader must make sure that the tags are consistent over time, as it influences search quality.
-+ coporate_function: engineering (string, optional) - The positions Corporate Function. It is a direct value, not a reference list item. The uploader must make sure that the tags are consistent over time, as it influences search quality.  Note that Avature they are often entered by hand. Some Avature and all Taleo come from SAP, and so are more consistent.
++ category: engineering (string, optional) - The positions category. It is a direct value, not a reference list item. The uploader must make sure that the tags are consistent over time, as it influences search quality.  Note that Avature they are often entered by hand. Some Avature and all Taleo come from SAP, and so are more consistent.
 + division: Manufacturing (string, optional) - Corporate, Retail, Distribution, Manufacturing. The division the position is under. Available in Taleo ( Requisition,JobInformation,Organization,Name ), June 28, 2018- working wtih Nike to get it for Avature.
 + relocation: false (boolean, required) - True or False.  Default to False.
 + source: `Avature (string, required) -Indicator of the source ATS.  Taleo or Avature.  Could also be a code. Could be inferred by the Apply URL 
