@@ -25,7 +25,7 @@ As a response the list of ids of successfully processed postings is returned
 
 + Response 200 (application/json)
 
-### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?with_details}{?corporate_functions}{?brands}{?experience_levels}{?divisions}{?radius}]
+### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?with_details}{?corporate_functions}{?brands}{?bands}{?divisions}{?radius}]
 
 Returns a summary of job opportunities matching search criteria. If more than one search criteria is
 present, then all of them needs to match.
@@ -36,12 +36,11 @@ present, then all of them needs to match.
     + location_country (optional, array[string], `USA,Canada`) ... filter for country, match: any of, comma-separated
     + location_province_state (optional, array[string], `California,Oregon`) ... filter for state or province, match: any of, comma-separated
     + location_city (optional, array[string], `Portland,San Fransisco`) ... filter for city, match: any of, comma-separated
-    + location_zip (optional, array[string], `12345,54321`) ... filter for zip code, match: any of, comma-separated
     + keywords (optional, array[string], `java,kafka`) ... filter for keywords, match: any of, comma-separated
     + with_details (required, boolean, `true`) ... If only a summary or full details should be returned. Summary is without large texts, like responsibilities, qualifications, benefits, additional information, apply url - see MergeJobSummaryEvent
     + corporate_functions ( optional, array[string] ) ... or search. Jobs have only one corporate function. Specifies jobs only with the defined corporate functions
     + brands ( optional, array[string] ) ... if Nike, Hurley specified- exclude Converse and Jordan
-    + experience_levels ( optional, array[string] ) ... Director, Individual Contributor.  I don't this this is consistent though. Not sure how this will work
+    + bands ( optional, array[string] ) ... Director, Individual Contributor. 
     + divisions ( optional, array[string] ) ... corporate, retail, distribution.  
     + radius ( optional, int ) ... number for the radius from location information, in kilometers. Need to discuss how this would work  
     
@@ -178,7 +177,7 @@ Returns a list of all keywords present in the database, regardless of job status
 + location (GeoLocation, optional) - The location where the job is available. The name is a direct value, not a reference list item. Location search works against this field.
 + keywords: java, spring, kafka (array[string], optional) - List of keywords tagging the job. It's a list of direct values, not a reference list items. The uploader must make sure that the tags are consistent over time, as it influences search quality.
 + coporate_function: engineering (string, optional) - The positions Corporate Function. It is a direct value, not a reference list item. The uploader must make sure that the tags are consistent over time, as it influences search quality.  Note that Avature they are often entered by hand. Some Avature and all Taleo come from SAP, and so are more consistent.
-+ division: Manufacturing (string, optional) - Corporate, Retail, Distribution, Manufacturing. The division the position is under. Possibly determined by the Corporate Function.  Available in Taleo, Possibly not in Avature.
++ division: Manufacturing (string, optional) - Corporate, Retail, Distribution, Manufacturing. The division the position is under. Available in Taleo ( Requisition,JobInformation,Organization,Name ), June 28, 2018- working wtih Nike to get it for Avature.
 + relocation: false (boolean, required) - True or False.  Default to False.
 + source: `Avature (string, required) -Indicator of the source ATS.  Taleo or Avature.  Could also be a code. Could be inferred by the Apply URL 
 
@@ -189,7 +188,8 @@ Returns a list of all keywords present in the database, regardless of job status
 + language: `en` (string, required) - ISO 639-1 language code
 + is_default: true (boolean, required) - indicates which of the translations is the default one. there should be only one set to true.
 + title: `Java guru with Spring and Kafka` (string, optional) - title of the job post
-+ responsibilities: `Lorem ipsum...` (string, optional) - the responsibilities block of the job ad
++ description: `Lorem ipsum...` (string, optional) - the description block of the job ad from Avature.
++ responsibilities: `Lorem ipsum...` (string, optional) - the responsibilities block of the job ad.
 + qualifications: `Lorem ipsum...` (string, optional) - the qualifications block of the job ad
 + benefits: `Lorem ipsum...` (string, optional) - the benefits block of the job ad
 + additional_information: `Lorem ipsum...` (string, optional) - the additional information block of the job ad
