@@ -260,19 +260,18 @@ Returns a list of all keywords present in the database, regardless of job status
 + apply_url: `http://jobs.mycompany.com/apply/eab208ac-8dea-43a4-901b-9f4f3510fe73` (string, optional) - url external to marketplace to apply to the job
 
 ## GeoLocation
-+ type: `Point` (string, required) - Always Point, this could be removed and hard-coded in the future if necessary.
-+ coordinates: 45.487879, 122.797643 (array, required) - Longitute first, then latitude. Valid longitude values are between -180 and 180, valid latitude values are between -90 and 90, inclusive.
++ administrational (AdministrationalGeoLocation, required) - location designated by country, province, etc
++ numerical (NumericalGeoLocation, optional) - location designated by coordinates
 
 ## AdministrationalGeoLocation
-+ Geo: NorthAmerica ( string, required ) - Geo of the country. Will be a code- not "NorthAmerica". This is derived field.
 + country: `USA` (string, required) - country
 + state_province: `Oregon` (string, required) - state or province
 + city: `Portland` (string, required) - city
-+ postal_code: `12345` (string, optional) - postal code ( NOT available in taleo and avature )
++ postal_code: `12345` (string, optional) - postal code 
 
 ## NumericalGeoLocation
-+ latitude: `45.5231` (number, required) - latitude of the same location as of administrational
-+ longitude: `122.6765` (number, required) - longitude of the same location as of administrational
++ type: `Point` (string, required) - Always Point, this could be removed and hard-coded in the future if necessary.
++ coordinates: `-122.797643`, `45.487879` (array, required) - Longitute first, then latitude. Valid longitude values are between -180 and 180, valid latitude values are between -90 and 90, inclusive.
 
 ## Paging
 + self (required)
