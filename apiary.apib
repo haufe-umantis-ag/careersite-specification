@@ -54,7 +54,7 @@ Returns a specific job opportunity based on a job id.
             + self (required)
                 + href: `/careersite/v1/m2m/opportunities/1234-abc` (string, required)
 
-### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?corporate_functions}{?brands}{?experience_levels}{?divisions}{?radius}{?categories}{?bands}]
+### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?corporate_functions}{?brands}{?divisions}{?radius}{?categories}{?bands}]
 
 Returns a summary of job opportunities matching search criteria. If more than one search criteria is
 present, then all of them needs to match.
@@ -71,7 +71,6 @@ present, then all of them needs to match.
     + corporate_functions ( optional, array[string], `engineering,sales` ) ... or search. Jobs have only one corporate function. Specifies jobs only with the defined corporate functions. TBD: yes
     + brands ( optional, array[string] ) ... if Nike, Hurley specified- exclude Converse and Jordan
     + bands ( optional, array[string] ) ... Director, Individual Contributor. 
-    + experience_levels ( optional, array[string], `Director` ) ... Director, Individual Contributor.  TBD: yes
     + divisions ( optional, array[string] ) ... corporate, retail, distribution.  
     + radius ( optional, int ) ... number for the radius from location information, in kilometers. Need to discuss how this would work
 
@@ -187,24 +186,6 @@ pagination for now.
     + Attributes
         + _embedded
             + categories (array[string])
-
-### list all available experience  [GET /careersite/v1/m2m/experience]
-
-Returns a list of all experience levels present in the database, regardless of job status. It's without
-pagination for now.
-
-+ Request (application/json)
-
-+ Response 200 (application/hal+json)
-
-    + Headers
-
-    + Body
-    
-    + Attributes
-        + _embedded
-            + experience (array[string])
-
 
 # Data Structures            
 
