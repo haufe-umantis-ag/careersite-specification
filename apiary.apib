@@ -54,7 +54,7 @@ Returns a specific job opportunity based on a job id.
             + self (required)
                 + href: `/careersite/v1/m2m/opportunities/1234-abc` (string, required)
 
-### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?corporate_functions}{?brands}{?experience_levels}{?divisions}{?radius}{?categories}{?bands}]
+### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?keywords}{?brands}{?divisions}{?categories}{?radius}]
 
 Returns a summary of job opportunities matching search criteria. If more than one search criteria is
 present, then all of them needs to match.
@@ -65,13 +65,9 @@ present, then all of them needs to match.
     + location_country (optional, array[string], `USA,Canada`) ... filter for country, match: any of, comma-separated
     + location_province_state (optional, array[string], `California,Oregon`) ... filter for state or province, match: any of, comma-separated
     + location_city (optional, array[string], `Portland,San Fransisco`) ... filter for city, match: any of, comma-separated
-    + location_zip (optional, array[string], `12345,54321`) ... filter for zip code, match: any of, comma-separated
     + keywords (optional, array[string], `java,kafka`) ... filter for keywords, match: any of, comma-separated
     + categories ( optional, array[string] ) ... or search. Jobs have only one category ( formerly called corporate function). Specifies jobs only with the defined categories
-    + corporate_functions ( optional, array[string], `engineering,sales` ) ... or search. Jobs have only one corporate function. Specifies jobs only with the defined corporate functions. TBD: yes
     + brands ( optional, array[string] ) ... if Nike, Hurley specified- exclude Converse and Jordan
-    + bands ( optional, array[string] ) ... Director, Individual Contributor. 
-    + experience_levels ( optional, array[string], `Director` ) ... Director, Individual Contributor.  TBD: yes
     + divisions ( optional, array[string] ) ... corporate, retail, distribution.  
     + radius ( optional, int ) ... number for the radius from location information, in kilometers. Need to discuss how this would work
 
@@ -166,23 +162,6 @@ pagination for
         + _embedded
             + categories (array[string])
             
-### list all available experience  [GET /careersite/v1/m2m/experience]
-
-Returns a list of all experience levels present in the database, regardless of job status. It's without
-pagination for 
-
-+ Request (application/json)
-
-+ Response 200 (application/hal+json)
-
-    + Headers
-
-    + Body
-    
-    + Attributes
-        + _embedded
-            + experience (array[string])
-
 ### list all available keywords  [GET /careersite/v1/m2m/keywords]
 
 Returns a list of all keywords present in the database, regardless of job status.
@@ -223,7 +202,6 @@ Returns a list of all keywords present in the database, regardless of job status
 + department_id: `jktuuk/364` (string, optional) - the id in the source system of the orgunit (has to match master data import)
 + owner_id: `dsagf/123` (string, optional) - the id in the source system of the hiring manager of the job (has to match master data import)
 + brand: `Converse` (string, required) - the name of the brand the job is for like Converse for Nike
-+ band: `Director` (string, optional) - the level of the job- Director, Individual Contributor, Junior, Manager, Executive, Entry Level, Team Leader, 
 + translations (array[JobOfferingTranslation], optional) - an array of language translations of text fields of the job ad
 + status: `ACTIVE` (enum, required) - the status of the job ad
     + DRAFT - non-completed job ad, serves as a placeholder for future completion
@@ -239,7 +217,6 @@ Returns a list of all keywords present in the database, regardless of job status
 + division: Manufacturing (string, optional) - Corporate, Retail, Distribution, Manufacturing. The division the position is under. Available in Taleo ( Requisition,JobInformation,Organization,Name ), June 28, 2018- working wtih Nike to get it for Avature.
 + relocation: false (boolean, required) - True or False.  Default to False.
 + source: `Avature (string, required) -Indicator of the source ATS.  Taleo or Avature.  Could also be a code. Could be inferred by the Apply URL 
-+ coporate_function: engineering (string, optional) - Corporate function of the position. It's a direct value, not a reference list item. The uploader must make sure that the tags are consistent over time, as it influences search quality.
 + position_type: `FULLTIME` (enum, optional) - Full Time or Part Time
     + FULLTIME
     + PARTTIME
@@ -267,7 +244,6 @@ Returns a list of all keywords present in the database, regardless of job status
 + country: `USA` (string, required) - country
 + state_province: `Oregon` (string, required) - state or province
 + city: `Portland` (string, required) - city
-+ postal_code: `12345` (string, optional) - postal code 
 
 ## NumericalGeoLocation
 + type: `Point` (string, required) - Always Point, this could be removed and hard-coded in the future if necessary.
