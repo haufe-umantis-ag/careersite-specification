@@ -198,7 +198,7 @@ Returns a list of all keywords present in the database, regardless of job status
 
 ## MergeJobEvent
 + id: `dsahg326253` (string, required) - the id of the posting in the source system
-+ position_id: `sdaghf-123` (string, optional) - the id in the source system of the position the job ad is referring to (has to match master data import)
++ rther_id: `sdaghf-123` (string, optional) - the id in the source system of the position the job ad is referring to (has to match master data import)
 + department_id: `jktuuk/364` (string, optional) - the id in the source system of the orgunit (has to match master data import)
 + owner_id: `dsagf/123` (string, optional) - the id in the source system of the hiring manager of the job (has to match master data import)
 + brand: `Converse` (string, required) - the name of the brand the job is for like Converse for Nike
@@ -215,11 +215,8 @@ Returns a list of all keywords present in the database, regardless of job status
 + keywords: java, spring, kafka (array[string], optional) - List of keywords tagging the job. It's a list of direct values, not a reference list items. The uploader must make sure that the tags are consistent over time, as it influences search quality.
 + category: engineering (string, optional) - The positions category. It is a direct value, not a reference list item. The uploader must make sure that the tags are consistent over time, as it influences search quality.  Note that Avature they are often entered by hand. Some Avature and all Taleo come from SAP, and so are more consistent.
 + division: Manufacturing (string, optional) - Corporate, Retail, Distribution, Manufacturing. The division the position is under. Available in Taleo ( Requisition,JobInformation,Organization,Name ), June 28, 2018- working wtih Nike to get it for Avature.
-+ relocation: false (boolean, required) - True or False.  Default to False.
 + source: `Avature (string, required) -Indicator of the source ATS.  Taleo or Avature.  Could also be a code. Could be inferred by the Apply URL 
-+ position_type: `FULLTIME` (enum, optional) - Full Time or Part Time
-    + FULLTIME
-    + PARTTIME
+
 
 ## DeleteJobEvent
 + id: `dsahg326253` (string, required) - the id of the posting in the source system
@@ -233,7 +230,6 @@ Returns a list of all keywords present in the database, regardless of job status
 + qualifications: `Lorem ipsum...` (string, optional) - the qualifications block of the job ad
 + benefits: `Lorem ipsum...` (string, optional) - the benefits block of the job ad
 + additional_information: `Lorem ipsum...` (string, optional) - the additional information block of the job ad
-+ position_type: `Full Time` (string, optional) - Full Time, Part Time. Not always entered
 + apply_url: `http://jobs.mycompany.com/apply/eab208ac-8dea-43a4-901b-9f4f3510fe73` (string, optional) - url external to marketplace to apply to the job
 
 ## GeoLocation
