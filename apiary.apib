@@ -54,7 +54,7 @@ Returns a specific job opportunity based on a job id.
             + self (required)
                 + href: `/careersite/v1/m2m/opportunities/1234-abc` (string, required)
 
-### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?corporate_functions}{?brands}{?divisions}{?radius}{?categories}{?bands}]
+### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?brands}{?divisions}{?radius}{?categories}{?radius}]
 
 Returns a summary of job opportunities matching search criteria. If more than one search criteria is
 present, then all of them needs to match.
@@ -65,14 +65,11 @@ present, then all of them needs to match.
     + location_country (optional, array[string], `USA,Canada`) ... filter for country, match: any of, comma-separated
     + location_province_state (optional, array[string], `California,Oregon`) ... filter for state or province, match: any of, comma-separated
     + location_city (optional, array[string], `Portland,San Fransisco`) ... filter for city, match: any of, comma-separated
-    + location_zip (optional, array[string], `12345,54321`) ... filter for zip code, match: any of, comma-separated
     + keywords (optional, array[string], `java,kafka`) ... filter for keywords, match: any of, comma-separated
     + categories ( optional, array[string] ) ... or search. Jobs have only one category ( formerly called corporate function). Specifies jobs only with the defined categories
-    + corporate_functions ( optional, array[string], `engineering,sales` ) ... or search. Jobs have only one corporate function. Specifies jobs only with the defined corporate functions. TBD: yes
     + brands ( optional, array[string] ) ... if Nike, Hurley specified- exclude Converse and Jordan
-    + bands ( optional, array[string] ) ... Director, Individual Contributor. 
     + divisions ( optional, array[string] ) ... corporate, retail, distribution.  
-    + radius ( optional, int ) ... number for the radius from location information, in kilometers. Need to discuss how this would work
+    + radius ( optional, int ) ... number for the radius from location information, in kilometers.
 
 + Request (application/json)
 
@@ -95,8 +92,7 @@ present, then all of them needs to match.
 
 ### list all available locations  [GET /careersite/v1/m2m/locations]
 
-Returns a list of all locations present in the database, regardless of job status. It's without
-pagination for now.
+Returns a list of all locations present in the database.
 
 + Request (application/json)
 
@@ -111,36 +107,20 @@ pagination for now.
             + locations (array[GeoLocation])
 
 
-### list all available keywords  [GET /careersite/v1/m2m/keywords]
+### list unique values for a given field [GET /careersite/v1/m2m/uniques/{field}]
 
-Returns a list of all keywords present in the database, regardless of job status.
+Returns a list of all values for a given field.
 
-+ Request (application/json)
++ Parameters
 
-+ Response 200 (application/hal+json)
-
-    + Headers
-
-    + Body
+    + field (enum[string], required) ... the field to see unique values in:
     
-            ["java", "kafka", "spring"]
-
-    + Schema
-    
-            {
-                "$schema": "http://json-schema.org/draft-06/schema#",
-                "id": "Career Site List of keywords",
-                "type": "array",
-                "items": {
-                    "type": "string"
-                }
-            }
-
-### list all available brands  [GET /careersite/v1/m2m/brands]
-
-Returns a list of all brands present in the database, regardless of job status. It's without
-pagination for now. (nike, jordan, converse, hurley)
-
+        + Members
+            + keywords
+            + brands
+            + divisions
+            + categories
+  
 + Request (application/json)
 
 + Response 200 (application/hal+json)
@@ -151,41 +131,8 @@ pagination for now. (nike, jordan, converse, hurley)
     
     + Attributes
         + _embedded
-            + brands (array[string])
-
-### list all available divisions  [GET /careersite/v1/m2m/divisions]
-
-Returns a list of all divisions present in the database, regardless of job status. It's without
-pagination for now.
-
-+ Request (application/json)
-
-+ Response 200 (application/hal+json)
-
-    + Headers
-
-    + Body
-    
-    + Attributes
-        + _embedded
-            + divisions (array[string])
-
-### list all available categories  [GET /careersite/v1/m2m/categories]
-
-Returns a list of all categories present in the database, regardless of job status. It's without
-pagination for now.
-
-+ Request (application/json)
-
-+ Response 200 (application/hal+json)
-
-    + Headers
-
-    + Body
-    
-    + Attributes
-        + _embedded
-            + categories (array[string])
+            + field (string)
+            + values (array[string])
 
 # Data Structures            
 
@@ -232,7 +179,6 @@ pagination for now.
 + qualifications: `Lorem ipsum...` (string, optional) - the qualifications block of the job ad
 + benefits: `Lorem ipsum...` (string, optional) - the benefits block of the job ad
 + additional_information: `Lorem ipsum...` (string, optional) - the additional information block of the job ad
-+ position_type: `Full Time` (string, optional) - Full Time, Part Time. Not always entered
 + apply_url: `http://jobs.mycompany.com/apply/eab208ac-8dea-43a4-901b-9f4f3510fe73` (string, optional) - url external to marketplace to apply to the job
 
 ## GeoLocation
