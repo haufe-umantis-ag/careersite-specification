@@ -113,7 +113,6 @@ Returns a list of all locations present in the database.
         + _embedded
             + locations (array[GeoLocation])
 
-
 ### list unique values for a given field [GET /careersite/v1/m2m/uniques/{field}]
 
 Returns a list of all values for a given field.
@@ -123,7 +122,6 @@ Returns a list of all values for a given field.
     + field (enum[string], required) ... the field to see unique values in:
     
         + Members
-            + keywords
             + brand
             + division
             + category
@@ -164,12 +162,10 @@ Returns a list of all values for a given field.
 + posting_start_date: `2018-05-01` (string, optional) - ISO 8601 date and time from when the job ad should be visible
 + posting_end_date: `2018-05-30` (string, optional) - ISO 8601 date and time until when the job ad should be visible
 + location (GeoLocation, optional) - The location where the job is available. The name is a direct value, not a reference list item. Location search works against this field.
-+ keywords: java, spring, kafka (array[string], optional) - List of keywords tagging the job. It's a list of direct values, not a reference list items. The uploader must make sure that the tags are consistent over time, as it influences search quality.
 + category: engineering (string, optional) - The positions category. It is a direct value, not a reference list item. The uploader must make sure that the tags are consistent over time, as it influences search quality.  Note that Avature they are often entered by hand. Some Avature and all Taleo come from SAP, and so are more consistent.
 + division: Manufacturing (string, optional) - Corporate, Retail, Distribution, Manufacturing. The division the position is under. Available in Taleo ( Requisition,JobInformation,Organization,Name ), June 28, 2018- working wtih Nike to get it for Avature.
 + relocation: false (boolean, required) - True or False.  Default to False.
-+ source: `Avature (string, required) -Indicator of the source ATS.  Taleo or Avature.  Could also be a code. Could be inferred by the Apply URL 
-+ coporate_function: engineering (string, optional) - Corporate function of the position. It's a direct value, not a reference list item. The uploader must make sure that the tags are consistent over time, as it influences search quality.
++ source: `Avature (string, required) -Indicator of the source ATS.  Taleo or Avature.  Could also be a code. Could be inferred by the Apply URL
 + position_type: `FULLTIME` (enum, optional) - Full Time or Part Time
     + FULLTIME
     + PARTTIME
