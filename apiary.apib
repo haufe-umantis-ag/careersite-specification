@@ -54,7 +54,7 @@ Returns a specific job opportunity based on a job id.
             + self (required)
                 + href: `/careersite/v1/m2m/opportunities/1234-abc` (string, required)
 
-### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?brands}{?divisions}{?radius}{?categories}{?radius}]
+### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?brands}{?divisions}{?radius}{?categories}{?radius}{?limit}{?offset}]
 
 Returns a summary of job opportunities matching search criteria. If more than one search criteria is
 present, then all of them needs to match.
@@ -70,6 +70,10 @@ present, then all of them needs to match.
     + brands ( optional, array[string] ) ... if Nike, Hurley specified- exclude Converse and Jordan
     + divisions ( optional, array[string] ) ... corporate, retail, distribution.  
     + radius ( optional, int ) ... number for the radius from location information, in kilometers.
+    + limit: `25` (optional, int) ... numer of results to return
+        + Default: 50
+    + offset: `4` (optional, int) ... page of results to return
+        + Default: 0
 
 + Request (application/json)
 
@@ -86,7 +90,10 @@ present, then all of them needs to match.
     + Body
     
     + Attributes
-        + _embedded
+        + _embeded
+            + count (number)
+            + limit (number)
+            + offset (number)
             + jobs (array[JobItem])
         + _links (Paging)
 
@@ -117,9 +124,9 @@ Returns a list of all values for a given field.
     
         + Members
             + keywords
-            + brands
-            + divisions
-            + categories
+            + brand
+            + division
+            + category
   
 + Request (application/json)
 
