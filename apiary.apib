@@ -12,7 +12,7 @@ Machine to machine operations for systems integration purposes.
 
 Imports opportunities that can relate to masterdata.
 
-As a response the list of ids of successfully processed postings is returned
+As a response the list of ids of successfully processed postings is returned.
 
 + Request (application/json)
     + Headers
@@ -54,18 +54,10 @@ Returns a specific job opportunity based on a job id.
             + self (required)
                 + href: `/careersite/v1/m2m/opportunities/1234-abc` (string, required)
 
-### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?keywords}{?brands}{?divisions}{?categories}{?radius}]
+### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?brands}{?divisions}{?radius}{?categories}{?radius}{?limit}{?offset}]
 
 Returns a summary of job opportunities matching search criteria. If more than one search criteria is
 present, then all of them needs to match.
-
-Comment and question about keywords search- I don't think the Avature and Taleo exports have keywords.  Butchershop would like to search the body of the JobOfferingTranslation fields
-* title: 
-* description: 
-* responsibilities: 
-* qualifications: 
-* benefits: 
-* additional_information:
 
 + Parameters
 
@@ -77,7 +69,11 @@ Comment and question about keywords search- I don't think the Avature and Taleo 
     + categories ( optional, array[string] ) ... or search. Jobs have only one category ( formerly called corporate function). Specifies jobs only with the defined categories
     + brands ( optional, array[string] ) ... if Nike, Hurley specified- exclude Converse and Jordan
     + divisions ( optional, array[string] ) ... corporate, retail, distribution.  
-    + radius ( optional, int ) ... number for the radius from location information, in kilometers. Need to discuss how this would work
+    + radius ( optional, int ) ... number for the radius from location information, in kilometers.
+    + limit: `25` (optional, int) ... numer of results to return
+        + Default: 50
+    + offset: `4` (optional, int) ... page of results to return
+        + Default: 0
 
 + Request (application/json)
 
@@ -94,17 +90,16 @@ Comment and question about keywords search- I don't think the Avature and Taleo 
     + Body
     
     + Attributes
-        + _embedded
+        + _embeded
+            + count (number)
+            + limit (number)
+            + offset (number)
             + jobs (array[JobItem])
         + _links (Paging)
 
-
-
-
 ### list all available locations  [GET /careersite/v1/m2m/locations]
 
-Returns a list of all locations present in the database, regardless of job status. It's without
-pagination for now.
+Returns a list of all locations present in the database.
 
 + Request (application/json)
 
@@ -117,13 +112,20 @@ pagination for now.
     + Attributes
         + _embedded
             + locations (array[GeoLocation])
-            
-            
-### list all available brands  [GET /careersite/v1/m2m/brands]
 
-Returns a list of all brands present in the database, regardless of job status. It's without
-pagination for ( nike, jordan, converse, hurley  )
+### list unique values for a given field [GET /careersite/v1/m2m/uniques/{field}]
 
+Returns a list of all values for a given field.
+
++ Parameters
+
+    + field (enum[string], required) ... the field to see unique values in:
+    
+        + Members
+            + brand
+            + division
+            + category
+  
 + Request (application/json)
 
 + Response 200 (application/hal+json)
@@ -134,83 +136,23 @@ pagination for ( nike, jordan, converse, hurley  )
     
     + Attributes
         + _embedded
-            + brands (array[string])
+            + field (string)
+            + values (array[string])
 
-### list all available divisions  [GET /careersite/v1/m2m/divisions]
-
-Returns a list of all divisions present in the database, regardless of job status. It's without
-pagination for 
-
-+ Request (application/json)
-
-+ Response 200 (application/hal+json)
-
-    + Headers
-
-    + Body
-    
-    + Attributes
-        + _embedded
-            + divisions (array[string])
-            
-### list all available categories  [GET /careersite/v1/m2m/categories]
-
-Returns a list of all categories present in the database, regardless of job status. It's without
-pagination for 
-
-+ Request (application/json)
-
-+ Response 200 (application/hal+json)
-
-    + Headers
-
-    + Body
-    
-    + Attributes
-        + _embedded
-            + categories (array[string])
-            
-### list all available keywords  [GET /careersite/v1/m2m/keywords]
-
-Returns a list of all keywords present in the database, regardless of job status.
-@Gergely- Please advise what this is.  
-
-+ Request (application/json)
-
-+ Response 200 (application/hal+json)
-
-    + Headers
-
-    + Body
-    
-            ["java", "kafka", "spring"]
-
-    + Schema
-    
-            {
-                "$schema": "http://json-schema.org/draft-06/schema#",
-                "id": "Career Site List of keywords",
-                "type": "array",
-                "items": {
-                    "type": "string"
-                }
-            }
-            
-            
-            
 # Data Structures            
-            
+
 ## JobEventList
 + merge_events (array[MergeJobEvent]) - an array of create/update job events
 + delete_events (array[DeleteJobEvent]) - an array of delete job events
 
 ## MergeJobEvent
 + id: `dsahg326253` (string, required) - the id of the posting in the source system
-+ rther_id: `sdaghf-123` (string, optional) - the id in the source system of the position the job ad is referring to (has to match master data import)
++ position_id: `sdaghf-123` (string, optional) - the id in the source system of the position the job ad is referring to (has to match master data import)
 + department_id: `jktuuk/364` (string, optional) - the id in the source system of the orgunit (has to match master data import)
 + owner_id: `dsagf/123` (string, optional) - the id in the source system of the hiring manager of the job (has to match master data import)
 + brand: `Converse` (string, required) - the name of the brand the job is for like Converse for Nike
-+ translations (array[JobOfferingTranslation], optional) - an array of language translations of text fields of the job ad
++ band: `Director` (string, optional) - the level of the job- Director, Individual Contributor, Junior, Manager, Executive, Entry Level, Team Leader, 
++ translations (array[JobOfferingTranslation], required) - an array of language translations of text fields of the job ad
 + status: `ACTIVE` (enum, required) - the status of the job ad
     + DRAFT - non-completed job ad, serves as a placeholder for future completion
     + ACTIVE - a job ad to be displayed
@@ -220,11 +162,13 @@ Returns a list of all keywords present in the database, regardless of job status
 + posting_start_date: `2018-05-01` (string, optional) - ISO 8601 date and time from when the job ad should be visible
 + posting_end_date: `2018-05-30` (string, optional) - ISO 8601 date and time until when the job ad should be visible
 + location (GeoLocation, optional) - The location where the job is available. The name is a direct value, not a reference list item. Location search works against this field.
-+ keywords: java, spring, kafka (array[string], optional) - List of keywords tagging the job. It's a list of direct values, not a reference list items. The uploader must make sure that the tags are consistent over time, as it influences search quality.
 + category: engineering (string, optional) - The positions category. It is a direct value, not a reference list item. The uploader must make sure that the tags are consistent over time, as it influences search quality.  Note that Avature they are often entered by hand. Some Avature and all Taleo come from SAP, and so are more consistent.
 + division: Manufacturing (string, optional) - Corporate, Retail, Distribution, Manufacturing. The division the position is under. Available in Taleo ( Requisition,JobInformation,Organization,Name ), June 28, 2018- working wtih Nike to get it for Avature.
-+ source: `Avature (string, required) -Indicator of the source ATS.  Taleo or Avature.  Could also be a code. Could be inferred by the Apply URL 
-
++ relocation: false (boolean, required) - True or False.  Default to False.
++ source: `Avature (string, required) -Indicator of the source ATS.  Taleo or Avature.  Could also be a code. Could be inferred by the Apply URL
++ position_type: `FULLTIME` (enum, optional) - Full Time or Part Time
+    + FULLTIME
+    + PARTTIME
 
 ## DeleteJobEvent
 + id: `dsahg326253` (string, required) - the id of the posting in the source system
@@ -232,22 +176,23 @@ Returns a list of all keywords present in the database, regardless of job status
 ## JobOfferingTranslation
 + language: `en` (string, required) - ISO 639-1 language code
 + is_default: true (boolean, required) - indicates which of the translations is the default one. there should be only one set to true.
-+ title: `Java guru with Spring and Kafka` (string, optional) - title of the job post
-+ description: `Lorem ipsum...` (string, optional) - the description block of the job ad from Avature.
-+ responsibilities: `Lorem ipsum...` (string, optional) - the responsibilities block of the job ad.
++ title: `Java guru with Spring and Kafka` (string, required) - title of the job post
++ description: `Lorem ipsum...` (string, required) - the description block of the job ad from Avature.
++ responsibilities: `Lorem ipsum...` (string, optional) - the responsibilities block of the job ad
 + qualifications: `Lorem ipsum...` (string, optional) - the qualifications block of the job ad
 + benefits: `Lorem ipsum...` (string, optional) - the benefits block of the job ad
 + additional_information: `Lorem ipsum...` (string, optional) - the additional information block of the job ad
-+ apply_url: `http://jobs.mycompany.com/apply/eab208ac-8dea-43a4-901b-9f4f3510fe73` (string, optional) - url external to marketplace to apply to the job
++ apply_url: `http://jobs.mycompany.com/apply/eab208ac-8dea-43a4-901b-9f4f3510fe73` (string, requierd) - url external to marketplace to apply to the job
 
 ## GeoLocation
 + administrational (AdministrationalGeoLocation, required) - location designated by country, province, etc
 + numerical (NumericalGeoLocation, optional) - location designated by coordinates
 
 ## AdministrationalGeoLocation
-+ country: `USA` (string, required) - country
++ country: `USA` (string, required) - country 
 + state_province: `Oregon` (string, required) - state or province
 + city: `Portland` (string, required) - city
++ postal_code: `12345` (string, optional) - postal code 
 
 ## NumericalGeoLocation
 + type: `Point` (string, required) - Always Point, this could be removed and hard-coded in the future if necessary.
