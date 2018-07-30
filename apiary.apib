@@ -54,7 +54,7 @@ Returns a specific job opportunity based on a job id.
             + self (required)
                 + href: `/careersite/v1/m2m/opportunities/1234-abc` (string, required)
 
-### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?brands}{?divisions}{?categories}{?radius}{?limit}{?offset}]
+### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?brands}{?divisions}{?categories}{?radius}{?limit}{?offset}{?sort_key}{?sort_dir}]
 
 Returns a summary of job opportunities matching search criteria. If more than one search criteria is
 present, then all of them needs to match.
@@ -74,6 +74,10 @@ present, then all of them needs to match.
         + Default: 50
     + offset: `4` (optional, int) ... page of results to return
         + Default: 0
+    + sort_key (optional, string, `category, division, brand, location_country, location_province_state, location_city, posting_start_date  `) ... column to sort the results on
+    + sort_dir (optional, string, ASC, DEC ) ...direction for sort
+            + ASC
+            + DEC
 
 + Request (application/json)
 
