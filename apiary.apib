@@ -54,7 +54,7 @@ Returns a specific job opportunity based on a job id.
             + self (required)
                 + href: `/careersite/v1/m2m/opportunities/1234-abc` (string, required)
 
-### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?brands}{?divisions}{?radius}{?categories}{?radius}{?limit}{?offset}]
+### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?brands}{?divisions}{?radius}{?categories}{?radius}{?limit}{?offset}{?sort_key}{?sort_dir}]
 
 Returns a summary of job opportunities matching search criteria. If more than one search criteria is
 present, then all of them needs to match.
@@ -74,6 +74,13 @@ present, then all of them needs to match.
         + Default: 50
     + offset: `4` (optional, int) ... page of results to return
         + Default: 0
+    + sort_key: `category` (optional, string) ... column to sort the results on
+        + Default: posting_start_date
+    + sort_dir: `ASC` (optional, string) ...direction for sort
+    
+        + Members
+            + ASC
+            + DESC
 
 + Request (application/json)
 
@@ -152,7 +159,7 @@ Returns a list of all values for a given field.
 + owner_id: `dsagf/123` (string, optional) - the id in the source system of the hiring manager of the job (has to match master data import)
 + brand: `Converse` (string, required) - the name of the brand the job is for like Converse for Nike
 + band: `Director` (string, optional) - the level of the job- Director, Individual Contributor, Junior, Manager, Executive, Entry Level, Team Leader, 
-+ translations (array[JobOfferingTranslation], optional) - an array of language translations of text fields of the job ad
++ translations (array[JobOfferingTranslation], required) - an array of language translations of text fields of the job ad
 + status: `ACTIVE` (enum, required) - the status of the job ad
     + DRAFT - non-completed job ad, serves as a placeholder for future completion
     + ACTIVE - a job ad to be displayed
@@ -176,13 +183,13 @@ Returns a list of all values for a given field.
 ## JobOfferingTranslation
 + language: `en` (string, required) - ISO 639-1 language code
 + is_default: true (boolean, required) - indicates which of the translations is the default one. there should be only one set to true.
-+ title: `Java guru with Spring and Kafka` (string, optional) - title of the job post
-+ description: `Lorem ipsum...` (string, optional) - the description block of the job ad from Avature.
++ title: `Java guru with Spring and Kafka` (string, required) - title of the job post
++ description: `Lorem ipsum...` (string, required) - the description block of the job ad from Avature.
 + responsibilities: `Lorem ipsum...` (string, optional) - the responsibilities block of the job ad
 + qualifications: `Lorem ipsum...` (string, optional) - the qualifications block of the job ad
 + benefits: `Lorem ipsum...` (string, optional) - the benefits block of the job ad
 + additional_information: `Lorem ipsum...` (string, optional) - the additional information block of the job ad
-+ apply_url: `http://jobs.mycompany.com/apply/eab208ac-8dea-43a4-901b-9f4f3510fe73` (string, optional) - url external to marketplace to apply to the job
++ apply_url: `http://jobs.mycompany.com/apply/eab208ac-8dea-43a4-901b-9f4f3510fe73` (string, required) - url external to marketplace to apply to the job
 
 ## GeoLocation
 + administrational (AdministrationalGeoLocation, required) - location designated by country, province, etc
