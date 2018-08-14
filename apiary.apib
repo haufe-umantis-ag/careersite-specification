@@ -54,7 +54,7 @@ Returns a specific job opportunity based on a job id.
             + self (required)
                 + href: `/careersite/v1/m2m/opportunities/1234-abc` (string, required)
 
-### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?brands}{?divisions}{?radius}{?band}{?categories}{?ids}{?radius}{?limit}{?offset}{?sort_key}{?sort_dir}]
+### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?brands}{?bands}{?divisions}{?radius}{?categories}{?ids}{?radius}{?limit}{?offset}{?sort_key}{?sort_dir}]
 
 Returns a summary of job opportunities matching search criteria. If more than one search criteria is
 present, then all of them needs to match.
@@ -68,10 +68,10 @@ present, then all of them needs to match.
     + keywords (optional, array[string], `java,kafka`) ... filter for keywords, match: any of, comma-separated
     + categories ( optional, array[string] ) ... or search. Jobs have only one category ( formerly called corporate function). Specifies jobs only with the defined categories
     + brands ( optional, array[string] ) ... if Nike, Hurley specified- exclude Converse and Jordan
+    + bands ( optional, string ) ... string defining experience level ( band ) of the job
     + divisions ( optional, array[string] ) ... corporate, retail, distribution.
     + ids: `job0,job1` ( optional, array[string] ) ... search for jobs by id
     + radius ( optional, int ) ... number for the radius from location information, in kilometers.
-    + band ( optional, string ) ... string defining experience level ( band ) of the job 
     + limit: `25` (optional, int) ... numer of results to return
         + Default: 50
     + offset: `4` (optional, int) ... page of results to return
