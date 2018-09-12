@@ -54,32 +54,34 @@ Returns a specific job opportunity based on a job id.
             + self (required)
                 + href: `/careersite/v1/m2m/opportunities/1234-abc` (string, required)
 
-### search by criteria  [GET /careersite/v1/m2m/opportunities{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?brands}{?bands}{?divisions}{?radius}{?categories}{?ids}{?radius}{?limit}{?language}{?offset}{?sort_key}{?sort_dir}]
+### search by criteria  [GET /careersite/v1/m2m/opportunities{?ignore_dates}{?newer_than}{?location_country}{?location_province_state}{?location_city}{?location_zip}{?keywords}{?brands}{?bands}{?divisions}{?radius}{?categories}{?ids}{?radius}{?limit}{?language}{?offset}{?sort_key}{?sort_dir}]
 
 Returns a summary of job opportunities matching search criteria. If more than one search criteria is
 present, then all of them needs to match.
 
 + Parameters
 
-    + newer_than (optional, string, `2018-05-01`) ... ISO8601 format date, to be compared with posting start date
-    + location_country (optional, array[string], `USA,Canada`) ... filter for country, match: any of, comma-separated
-    + location_province_state (optional, array[string], `California,Oregon`) ... filter for state or province, match: any of, comma-separated
-    + location_city (optional, array[string], `Portland,San Fransisco`) ... filter for city, match: any of, comma-separated
-    + keywords (optional, array[string], `java,kafka`) ... filter for keywords, match: any of, comma-separated
-    + categories ( optional, array[string] ) ... or search. Jobs have only one category ( formerly called corporate function). Specifies jobs only with the defined categories
-    + brands ( optional, array[string] ) ... if Nike, Hurley specified- exclude Converse and Jordan
-    + bands ( optional, array[string] ) ... string defining experience levels ( bandsup ) of the job
-    + divisions ( optional, array[string] ) ... corporate, retail, distribution.
-    + ids: `job0,job1` ( optional, array[string] ) ... search for jobs by id
+    + ignore_dates: `true` (optional, boolean) - If true, ignore start/end date fields
+        + Default: false
+    + newer_than: `2018-05-01` (optional, string) - ISO8601 format date, to be compared with posting start date
+    + location_country: `USA,Canada` (optional, array[string]) - filter for country, match: any of, comma-separated
+    + location_province_state: `California,Oregon` (optional, array[string]) - filter for state or province, match: any of, comma-separated
+    + location_city: `Portland,San Fransisco` (optional, array[string]) - filter for city, match: any of, comma-separated
+    + keywords: `java,kafka` (optional, array[string]) - filter for keywords, match: any of, comma-separated
+    + categories: `unknown` (optional, array[string]) - Specifies jobs only with the defined categories
+    + brands: `Nike` (optional, array[string]) - Return results for one or more brands
+    + bands: `executive` (optional, array[string]) - string defining experience levels of the job
+    + divisions: `retail` (optional, array[string]) - corporate, retail, distribution.
+    + ids: `job0,job1` (optional, array[string]) - search for jobs by id
     + language: `en` (string, optional) - ISO 639-1 language code. default to en
-    + radius ( optional, int ) ... number for the radius from location information, in kilometers.
-    + limit: `25` (optional, int) ... numer of results to return
+    + radius: `10` (optional, int) - number for the radius from location information, in kilometers.
+    + limit: `25` (optional, int) - numer of results to return
         + Default: 50
-    + offset: `4` (optional, int) ... page of results to return
+    + offset: `4` (optional, int) - page of results to return
         + Default: 0
-    + sort_key: `category` (optional, string) ... column to sort the results on
+    + sort_key: `category` (optional, string) - column to sort the results on
         + Default: posting_start_date
-    + sort_dir: `ASC` (optional, string) ...direction for sort
+    + sort_dir: `ASC` (optional, string) - direction for sort
     
         + Members
             + ASC
@@ -173,7 +175,7 @@ Returns a list of all values for a given field.
 + posting_end_date: `2018-05-30` (string, optional) - ISO 8601 date and time until when the job ad should be visible
 + location (GeoLocation, optional) - The location where the job is available. The name is a direct value, not a reference list item. Location search works against this field.
 + category: engineering (string, optional) - The positions category. It is a direct value, not a reference list item. The uploader must make sure that the tags are consistent over time, as it influences search quality.  Note that Avature they are often entered by hand. Some Avature and all Taleo come from SAP, and so are more consistent.
-+ division: Manufacturing (string, optional) - Corporate, Retail, Distribution, Manufacturing. The division the position is under. Available in Taleo ( Requisition,JobInformation,Organization,Name ), June 28, 2018- working wtih Nike to get it for Avature.
++ division: Manufacturing (string, required) - Corporate, Retail, Distribution, Manufacturing. The division the position is under. Available in Taleo ( Requisition,JobInformation,Organization,Name ), June 28, 2018- working wtih Nike to get it for Avature.
 + relocation: false (boolean, required) - True or False.  Default to False.
 + source: Avature (string, required) -Indicator of the source ATS.  Taleo or Avature.  Could also be a code. Could be inferred by the Apply URL
 + position_type: `FULLTIME` (enum, optional) - Full Time or Part Time
