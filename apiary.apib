@@ -26,6 +26,23 @@ As a response the list of ids of successfully processed postings is returned.
 
 + Response 200 (application/json)
 
+    + Headers
+    
+    + Body
+    
+    + Attributes
+        + merges (array)
+            + (object)
+                + id: `abc123` (string, required) - The ID of the imported job.
+                + success: true (boolean, required) - Was the import successful?
+                + geo: true (boolean, optional) - Did we get geocoding data from Google? If we don't it does not invalidate the import.
+                + error: `Missing fields: XXX` (string, optional) - This will appear if success is false.
+        + deletes (array)
+            + (object)
+                + id: `abc456` (string, required) - The ID of the deleted job.
+                + success: true (boolean, required) - Was the delete successful?
+                + error: `Could not connect to database` (string, optional) - Only appears if success is false.
+            
 ### get job  [GET /careersite/v1/m2m/opportunities/{jobid}]
 
 Returns a specific job opportunity based on a job id.
